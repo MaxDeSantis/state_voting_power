@@ -11,14 +11,17 @@
 #include <cstdio>
 #include <cstring>
 #include <algorithm>
+#include <boost/multiprecision/cpp_int.hpp>
+#include <iostream>
 
-using namespace::std;
+using namespace std;
+using namespace boost::multiprecision;
 
 vector<struct polyTerm> polyMultiply(vector<struct polyTerm> v1, vector<struct polyTerm> v2);
 void polyPrint(vector<struct polyTerm> v1);
 
 struct polyTerm{
-    int64_t coeff = 1;
+    int128_t coeff = 1;
     int exp = 0;
 };
 
@@ -90,8 +93,10 @@ vector<struct polyTerm> polyMultiply(vector<struct polyTerm> v1, vector<struct p
 
 void polyPrint(vector<struct polyTerm> v1) {
     for(int i = 0; i < v1.size()-1; i++) {
-        printf("%dx^%d + ", v1.at(i).coeff, v1.at(i).exp);
+        cout << v1.at(i).coeff << "x^" << v1.at(i).exp << " + ";
+        //printf("%dx^%d + ", v1.at(i).coeff, v1.at(i).exp);
         if( ((i % 10) == 0) && i != 0) {printf("\n");}
     }
-    printf("%dx^%d\n", v1.at(v1.size()-1).coeff, v1.at(v1.size()-1).exp);
+    cout << v1.at(v1.size()-1).coeff << "x^" << v1.at(v1.size()-1).exp << "\n";
+    //printf("%dx^%d\n", v1.at(v1.size()-1).coeff, v1.at(v1.size()-1).exp);
 }
