@@ -18,14 +18,14 @@ vector<struct polyTerm> polyMultiply(vector<struct polyTerm> v1, vector<struct p
 void polyPrint(vector<struct polyTerm> v1);
 
 struct polyTerm{
-    int coeff = 1;
+    int64_t coeff = 1;
     int exp = 0;
 };
 
 int main(int argc, char* argv[]) {
 
 
-    int voteCounts[] = {55, 38, 29, 29, 20, 20, 18, 16, 16, 15,
+    vector<int> vals = {55, 38, 29, 29, 20, 20, 18, 16, 16, 15,
                         14, 13, 11, 11, 11, 11, 10, 10, 10, 10,
                         10, 9, 9, 9, 8, 7, 7, 7, 6, 6, 6, 6, 6,
                         6, 6, 5, 5, 5, 4, 4, 4, 4, 4, 3, 3, 3,
@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
     vector<polyTerm> vec2(2);
     vector<polyTerm> vec1;
 
-    vector<int> vals = {2, 2, 4, 10, 16, 4, 5};
+    //vector<int> vals = {2, 2, 4, 10, 16, 4, 5};
 
     mainVec.at(0).coeff = 1;
 
@@ -72,13 +72,15 @@ vector<struct polyTerm> polyMultiply(vector<struct polyTerm> v1, vector<struct p
 
             tempTerm.coeff = (v1.at(i).coeff * v2.at(j).coeff);
 
-            const auto p = find_if(tempVec.begin(), tempVec.end(), [tempTerm](const polyTerm &term) {return term.exp == tempTerm.exp;});
+            if(tempTerm.exp < 270) {
+                const auto p = find_if(tempVec.begin(), tempVec.end(), [tempTerm](const polyTerm &term) {return term.exp == tempTerm.exp;});
             
-            if(p != tempVec.end()) {
-                tempVec.at(p - tempVec.begin()).coeff = tempVec.at(p - tempVec.begin()).coeff + tempTerm.coeff;
-            }
-            else {
-                tempVec.push_back(tempTerm);
+                if(p != tempVec.end()) {
+                    tempVec.at(p - tempVec.begin()).coeff = tempVec.at(p - tempVec.begin()).coeff + tempTerm.coeff;
+                }
+                else {
+                    tempVec.push_back(tempTerm);
+                }
             }
         }
     }
@@ -89,6 +91,7 @@ vector<struct polyTerm> polyMultiply(vector<struct polyTerm> v1, vector<struct p
 void polyPrint(vector<struct polyTerm> v1) {
     for(int i = 0; i < v1.size()-1; i++) {
         printf("%dx^%d + ", v1.at(i).coeff, v1.at(i).exp);
+        if( ((i % 10) == 0) && i != 0) {printf("\n");}
     }
     printf("%dx^%d\n", v1.at(v1.size()-1).coeff, v1.at(v1.size()-1).exp);
 }
