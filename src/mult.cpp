@@ -1,10 +1,3 @@
-/*
-    Author: Max DeSantis
-    Desc. : This program computes the Banzhaf power of the states within the United States electoral college. It uses generating functions to do so.
-
-*/
-
-
 #include <iostream>
 #include <cmath>
 #include <vector>
@@ -23,18 +16,6 @@ struct polyTerm{
 };
 
 int main(int argc, char* argv[]) {
-
-
-    int voteCounts[] = {55, 38, 29, 29, 20, 20, 18, 16, 16, 15,
-                        14, 13, 11, 11, 11, 11, 10, 10, 10, 10,
-                        10, 9, 9, 9, 8, 7, 7, 7, 6, 6, 6, 6, 6,
-                        6, 6, 5, 5, 5, 4, 4, 4, 4, 4, 3, 3, 3,
-                        3, 3, 3, 3, 3};
-    string postCodes[] = {"CA", "TX", "FL", "NY", "IL", "PA", "OH", "GA", "MI", "NC",
-                        "NJ", "VA", "AZ", "TN", "IN", "MA", "WA", "MN", "MO", "WI",
-                        "MD", "CO", "AL", "SC", "KY", "OR", "OK", "CT", "NV", "UT", "KS", "IA", "AR",
-                        "LA", "MS", "NM", "NE", "WV", "ID", "RI", "NH", "ME", "HI", "MT", "WY", "SD",
-                        "ND", "DC", "DE", "VT", "AK"};
 
     vector<polyTerm> mainVec(1);
     vector<polyTerm> vec2(2);
@@ -55,9 +36,16 @@ int main(int argc, char* argv[]) {
     [](const polyTerm &a, const polyTerm&b) {
         return a.exp < b.exp;
     });
-
     polyPrint(mainVec);
+
     return 0;
+}
+
+void polyPrint(vector<struct polyTerm> v1) {
+    for(int i = 0; i < v1.size()-1; i++) {
+        printf("%dx^%d + ", v1.at(i).coeff, v1.at(i).exp);
+    }
+    printf("%dx^%d\n", v1.at(v1.size()-1).coeff, v1.at(v1.size()-1).exp);
 }
 
 vector<struct polyTerm> polyMultiply(vector<struct polyTerm> v1, vector<struct polyTerm> v2) {
@@ -84,11 +72,4 @@ vector<struct polyTerm> polyMultiply(vector<struct polyTerm> v1, vector<struct p
     }
 
     return tempVec;
-}
-
-void polyPrint(vector<struct polyTerm> v1) {
-    for(int i = 0; i < v1.size()-1; i++) {
-        printf("%dx^%d + ", v1.at(i).coeff, v1.at(i).exp);
-    }
-    printf("%dx^%d\n", v1.at(v1.size()-1).coeff, v1.at(v1.size()-1).exp);
 }
