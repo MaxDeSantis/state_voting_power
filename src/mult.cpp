@@ -1,9 +1,8 @@
 /*
     Author: Max DeSantis
-    Desc. : This program computes the Banzhaf power of the states within the United States electoral college. It uses generating functions to do so.
-
+    Desc. : This program computes the Banzhaf power of the states within the United States electoral college. 
+    It uses generating functions to do so.
 */
-
 
 #include <iostream>
 #include <cmath>
@@ -51,68 +50,49 @@ int main(int argc, char* argv[]) {
     vector<polyTerm> vec2(2);
     vector<polyTerm> vec1;
 
-    //mainVec.at(0).coeff = 1;
-
     //Loop through every state
-    for(int i = 0; i < vals.size(); i++) { //testing with CA, TX, NY
+    for(int i = 0; i < vals.size(); i++) {
         mainVec.clear();
         mainVec.push_back(makePoly(1, 0));
 
-        //printf("made it to i: %d\n", i);
         cout << "Current main state : " << postCodes[i] << "\n";
 
         //Multiply by all other states
         for(int j = 0; j < vals.size(); j++) {
-            //printf("made it to j: %d\n", j);
-
             //Don't multiply if it's our "special" state
             if(i != j) {
-                //cout << "Current sub state : " << postCodes[j] << "\n";
                 vec1 = mainVec;
                 vec2.at(1).exp = vals.at(j);
                 mainVec = polyMultiply(vec1, vec2);
             }
             
         }
-        //printf("made it here1\n");
         sort(mainVec.begin(),
             mainVec.end(),
             [](const polyTerm &a, const polyTerm&b) {
             return a.exp < b.exp;
         });
-        //polyPrint(mainVec);
-        //printf("made it here2\n");
         //Here we have a generating function for our specified state i
         for(int k = QUOTA - 1; k >= QUOTA - vals.at(i); k--) {
-            //printf("made it here3\n");
-            //Sum up the coefficients of the possible swing values (263 - 269 for OK)
 
+            //Sum up the coefficients of the possible swing values (263 - 269 for OK)
             //Need to find the index of the term that has exponents of k
             const auto p = find_if(mainVec.begin(), mainVec.end(), [k](const polyTerm &term) {return term.exp == k;});
 
             if(p != mainVec.end()) {
-                //printf("Swing found! %d\n", k);
                 stateSwings.at(i) = stateSwings.at(i) + mainVec.at(p - mainVec.begin()).coeff;
-                //cout << "State swings for " << postCodes[i] << " : " << stateSwings.at(i) << "\n";
             }
         }
         //Update total swings
         totalSwings = totalSwings + stateSwings.at(i);
-        //cout << "Total swings: " << totalSwings << "\n";
-        //printf("made it here3\n");
     }
 
     for(int x = 0; x < vals.size(); x++) {
-        //printf("made it to x: %d\n", x);
         auto swings = cpp_bin_float_quad(stateSwings.at(x));
         auto allSwings = cpp_bin_float_quad(totalSwings);
         auto powerIndex =  swings / allSwings;
         cout << postCodes[x] << " : " << powerIndex << "\n";
     }
-    
-    
-
-    //polyPrint(mainVec);
     return 0;
 }
 
