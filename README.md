@@ -1,5 +1,5 @@
 # state_voting_power
-An easy to use application to compare and evaluate relative voting power between the 51 voting members of the U.S. Electoral College.
+Computes the relative voting power of all 51 voting members of the Electoral College.
 
 ## The Algorithm
 Power is calculated using the Banzhaf method. Simply put, it is the number of "swings" from losing to winning in which a state causes, divided by the total number of swings that can occur. As an example, we can look at Oklahoma, which has 7 electoral votes. This means any coalition of states comprising 263 - 269 electoral votes (excluding Oklahoma) can be swung by Oklahoma if it joins. Dividing a state's number of swings by the total number of swings provides the power index, which describes the relative power of a state in the college.
